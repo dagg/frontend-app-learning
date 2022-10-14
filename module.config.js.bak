@@ -1,0 +1,9 @@
+module.exports = {
+  localModules: [
+    {
+      moduleName: '@edx/frontend-platform',
+      dir: '../frontend-platform',
+      dist: 'dist',
+    },
+  ],
+};

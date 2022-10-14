@@ -1,0 +1,12 @@
+[core]
+	repositoryformatversion = 0
+	filemode = true
+	bare = false
+	logallrefupdates = true
+	hooksPath = .husky
+[remote "origin"]
+	url = https://github.com/edx/frontend-app-learning
+	fetch = +refs/tags/open-release/nutmeg.2:refs/tags/open-release/nutmeg.2
+[user]
+	email = agelakis@gmail.com
+	name = Dimitris Angelakis
