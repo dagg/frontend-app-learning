@@ -28,6 +28,7 @@ Factory.define('outlineTabData')
     upgrade_url: `${host}/dashboard`,
   }))
   .attrs({
+    course_access_redirect: false,
     has_scheduled_content: null,
     access_expiration: null,
     can_show_upgrade_sock: false,
@@ -63,3 +64,11 @@ Factory.define('outlineTabData')
     offer: null,
     welcome_message_html: '<p>Welcome to this course!</p>',
   });
+
+Factory.define('outlineTabCourseAccessRedirectData')
+  .option('error', 'someError')
+  .attr('course_access_redirect', true)
+  .attr('url', ['error'], (error) => `www.somesite.com/fixerror/${error}/fix`)
+  .option('error_code', ['error'], (error) => error)
+  .option('developer_message', ['error'], (error) => `This is a message for developers that ${error} happened!`)
+  .option('user_message', ['error'], (error) => `This is a message for users that ${error} happened!`);

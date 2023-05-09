@@ -61,10 +61,11 @@ describe('Data layer integration tests', () => {
 
   describe('Test fetchOutlineTab', () => {
     const outlineBaseUrl = `${getConfig().LMS_BASE_URL}/api/course_home/outline`;
+    const outlineUrl = `${outlineBaseUrl}/${courseId}`;
 
     it('Should result in fetch failure if error occurs', async () => {
       axiosMock.onGet(courseMetadataUrl).networkError();
-      axiosMock.onGet(`${outlineBaseUrl}/${courseId}`).networkError();
+      axiosMock.onGet(outlineUrl).networkError();
 
       await executeThunk(thunks.fetchOutlineTab(courseId), store.dispatch);
 
@@ -75,8 +76,6 @@ describe('Data layer integration tests', () => {
     it('Should fetch, normalize, and save metadata', async () => {
       const outlineTabData = Factory.build('outlineTabData', { courseId });
 
-      const outlineUrl = `${outlineBaseUrl}/${courseId}`;
-
       axiosMock.onGet(courseMetadataUrl).reply(200, courseHomeMetadata);
       axiosMock.onGet(outlineUrl).reply(200, outlineTabData);
 
@@ -85,6 +84,32 @@ describe('Data layer integration tests', () => {
       const state = store.getState();
       expect(state.courseHome.courseStatus).toEqual('loaded');
       expect(state).toMatchSnapshot();
+    });
+
+    describe('redirect', () => {
+      beforeEach(() => {
+        delete window.location;
+        window.location = { replace: jest.fn() };
+        axiosMock.onGet(courseMetadataUrl).reply(200, courseHomeMetadata);
+      });
+
+      it('does not happen when no redirect info is returned', async () => {
+        const outlineTabData = Factory.build('outlineTabData', { courseId });
+        axiosMock.onGet(outlineUrl).reply(200, outlineTabData);
+
+        await executeThunk(thunks.fetchOutlineTab(courseId), store.dispatch);
+
+        expect(window.location.replace).not.toHaveBeenCalled();
+      });
+
+      it('happens when redirect info is returned', async () => {
+        const outlineTabRedirectData = Factory.build('outlineTabCourseAccessRedirectData');
+        axiosMock.onGet(outlineUrl).reply(200, outlineTabRedirectData);
+
+        await executeThunk(thunks.fetchOutlineTab(courseId), store.dispatch);
+
+        expect(window.location.replace).toHaveBeenCalledWith(outlineTabRedirectData.url);
+      });
     });
   });
 

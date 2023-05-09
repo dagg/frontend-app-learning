@@ -330,6 +330,11 @@ export async function getOutlineTabData(courseId) {
     headers,
   } = tabData;
 
+  if (data.course_access_redirect) {
+    logInfo(`Redirected away from course outline: ${data.error_code} - ${data.developer_message}`);
+    window.location.replace(data.url);
+  }
+
   const accessExpiration = camelCaseObject(data.access_expiration);
   const canShowUpgradeSock = data.can_show_upgrade_sock;
   const certData = camelCaseObject(data.cert_data);
