@@ -331,6 +331,11 @@ export async function getOutlineTabData(courseId) {
   } = tabData;
 
   if (data.course_access_redirect) {
+    // If the user requesting the course outline doesn't have access to the course,
+    // they may be redirected to another page.
+    // - They need to complete a survey -> redirect to survey
+    // - Course hasn't started yet -> redirect to dashboard with error message
+    // The API will return the url the user should be redirected to.
     logInfo(`Redirected away from course outline: ${data.error_code} - ${data.developer_message}`);
     window.location.replace(data.url);
   }
