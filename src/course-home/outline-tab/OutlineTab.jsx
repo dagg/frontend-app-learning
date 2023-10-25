@@ -76,7 +76,7 @@ const OutlineTab = ({ intl }) => {
   // Below the course title alerts (appearing in the order listed here)
   const courseStartAlert = useCourseStartAlert(courseId);
   const courseEndAlert = useCourseEndAlert(courseId);
-  const certificateAvailableAlert = useCertificateAvailableAlert(courseId);
+  //  const certificateAvailableAlert = useCertificateAvailableAlert(courseId);
   const privateCourseAlert = usePrivateCourseAlert(courseId);
   const scheduledContentAlert = useScheduledContentAlert(courseId);
 
@@ -143,7 +143,7 @@ const OutlineTab = ({ intl }) => {
             topic="outline-course-alerts"
             className="mb-3"
             customAlerts={{
-              ...certificateAvailableAlert,
+            //  ...certificateAvailableAlert,
               ...courseEndAlert,
               ...courseStartAlert,
               ...scheduledContentAlert,
