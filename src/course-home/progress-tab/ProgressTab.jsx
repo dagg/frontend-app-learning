@@ -187,11 +187,6 @@ const ProgressTab = () => {
             </div>
           )}
 
-          <CourseGrade />
-          <div className={`grades my-4 p-4 rounded raised-card ${applyLockedOverlay}`} aria-hidden={gradesFeatureIsFullyLocked}>
-            <GradeSummary />
-            <DetailedGrades />
-          </div>
         </div>
 
         {/* Side panel */}
