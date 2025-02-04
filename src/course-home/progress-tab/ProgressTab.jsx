@@ -45,9 +45,9 @@ const ProgressTab = () => {
   let showprogress = true;
 
   if (certificateData) {
-    // console.log(
-    //   '~~~~~~CERT DATA:>' + JSON.stringify(certificateData) + '<~~~~~~'
-    // );
+     console.log(
+       '~~~~~~CERT DATA:>' + JSON.stringify(certificateData) + '<~~~~~~'
+     );
     if (certificateData.certWebViewUrl) {
       NoCertData = false;
       showprogress = true;
