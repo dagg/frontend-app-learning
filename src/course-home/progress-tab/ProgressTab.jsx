@@ -2,7 +2,7 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import { breakpoints, useWindowSize } from '@openedx/paragon';
 
-import { getAuthenticatedUser } from '@edx/frontend-platform/auth'; 
+import { getAuthenticatedUser } from '@edx/frontend-platform/auth';
 
 import CertificateStatus from './certificate-status/CertificateStatus';
 import CourseCompletion from './course-completion/CourseCompletion';
@@ -29,61 +29,61 @@ const ProgressTab = () => {
   const applyLockedOverlay = gradesFeatureIsFullyLocked ? 'locked-overlay' : '';
 
 // DAGG ADDITIONS 1 START //
-  let enablecert = true;                                                        
-  if (                                                                          
-    String(courseId).includes('Physics') &&                                     
-    !String(courseId).includes('Eur') &&                                        
-    (String(user.email).includes('physics.uoc.gr') ||                           
-      String(user.email).includes('materials.uoc.gr') ||                        
-      String(user.email).includes('tem.uoc.gr'))                                
-  ) {                                                                           
-    enablecert = false;                                                         
-  }                                                                             
-  // console.log('ENABLE CERT 1: ' + enablecert);                               
+  let enablecert = true;
+  if (
+    String(courseId).includes('Physics') &&
+    !String(courseId).includes('Eur') &&
+    (String(user.email).includes('physics.uoc.gr') ||
+      String(user.email).includes('materials.uoc.gr') ||
+      String(user.email).includes('tem.uoc.gr'))
+  ) {
+    enablecert = false;
+  }
+  // console.log('ENABLE CERT 1: ' + enablecert);
 
-  let NoCertData = true;                                                        
-  let showprogress = true;                                                      
+  let NoCertData = true;
+  let showprogress = true;
 
-  if (certificateData) {                                                        
-    // console.log(                                                             
-    //   '~~~~~~CERT DATA:>' + JSON.stringify(certificateData) + '<~~~~~~'      
-    // );                                                                       
-    if (certificateData.certWebViewUrl) {                                       
-      NoCertData = false;                                                       
-      showprogress = true;                                                      
-    } else {                                                                    
-      NoCertData = true;                                                        
-      // console.log('NO CERT DATA');                                           
-      showprogress = false;                                                     
-    }                                                                           
+  if (certificateData) {
+    // console.log(
+    //   '~~~~~~CERT DATA:>' + JSON.stringify(certificateData) + '<~~~~~~'
+    // );
+    if (certificateData.certWebViewUrl) {
+      NoCertData = false;
+      showprogress = true;
+    } else {
+      NoCertData = true;
+      // console.log('NO CERT DATA');
+      showprogress = false;
+    }
 
-    if (                                                                        
-      certificateData.certStatus === 'audit_passing' ||                         
-      certificateData.certStatus === 'honor_passing'                            
-    ) {                                                                         
-      enablecert = false;                                                       
-    }                                                                           
+    if (
+      certificateData.certStatus === 'audit_passing' ||
+      certificateData.certStatus === 'honor_passing'
+    ) {
+      enablecert = false;
+    }
   }
 
-  const divPayStyles = {                                                        
-      boxShadow: '0 0.0625rem 0.125rem rgba(0, 0, 0, 0.2)',                       
-      margin: '4em',                     
-      padding: '1em',                    
-      borderRadius: '0.375rem',                                                   
-    };                                   
+  const divPayStyles = {
+      boxShadow: '0 0.0625rem 0.125rem rgba(0, 0, 0, 0.2)',
+      margin: '4em',
+      padding: '1em',
+      borderRadius: '0.375rem',
+    };
 
-    const divPayButtonStyles = {                                                  
-      display: 'block',                  
-      border: '1px solid #d2c9c9',                                                
-      borderRadius: '3px',               
-      boxShadow: 'inset 0 1px 0 0 #fff',                                          
-      color: '#333',                     
-      fontWeight: 'bold',                
-      marginTop: '2em',                  
-      padding: '.6em',                   
-      backgroundColor: '#f1f1f1',                                                 
-      cursor: 'pointer',                 
-      textAlign: 'center',               
+    const divPayButtonStyles = {
+      display: 'block',
+      border: '1px solid #d2c9c9',
+      borderRadius: '3px',
+      boxShadow: 'inset 0 1px 0 0 #fff',
+      color: '#333',
+      fontWeight: 'bold',
+      marginTop: '2em',
+      padding: '.6em',
+      backgroundColor: '#f1f1f1',
+      cursor: 'pointer',
+      textAlign: 'center',
     };
 
 // DAGG ADDITIONS 1 END //
