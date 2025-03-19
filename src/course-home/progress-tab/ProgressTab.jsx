@@ -44,13 +44,7 @@ const ProgressTab = () => {
   let showprogress = true;
 
   if (certificateData) {
-    console.log(
-      '~~~~~~[CERT DATA]:>' + JSON.stringify(certificateData) + '<~~~~~~'
-    );
     if (certificateData.certWebViewUrl) {
-      console.log(
-        '~~~~~~CERT DATA YES: [[['+certificateData.certWebViewUrl+']]]~~~~~~'
-      );
       NoCertData = false;
       showprogress = true;
     } else {
@@ -157,10 +151,6 @@ const ProgressTab = () => {
                   email για την ανάρτησή της.
                 </p>
 
-                <p className="copy">
-                  Η βεβαίωση επιτυχούς παρακολούθησης εκδίδεται <b>ΔΩΡΕΑΝ</b>{' '}
-                  για ανέργους εγγεγραμμένους στον ΟΑΕΔ.
-                </p>
                 <br />
                 <h3 lasscName="hd hd-4 title">
                   Για να ενεργοποιηθεί η σελίδα της προόδου σας θα πρέπει να
