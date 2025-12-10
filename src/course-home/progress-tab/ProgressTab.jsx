@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { breakpoints, useWindowSize } from '@openedx/paragon';
 
@@ -25,6 +25,30 @@ const ProgressTab = () => {
     courseId
   );
 
+  const [data, setData] = useState([]);
+
+    useEffect(() => {
+    fetch(`https://restapi.palmdev.mathesis.org/fetch-data?uid=${user.userId}`, {method: 'GET'},
+          {headers: { 'Content-Type': 'multipart/form-data', 'Access-Control-Allow-Origin': '*'}})
+        .then(response => response.json())
+        .then(data => setData(data))
+        .catch(error => console.error("Error fetching data:", error));
+  }, []);
+
+  const api_data_results = [];
+  if (Object.keys(data).length == 0){
+    console.log("NO DATA YET...")
+  } else {
+    for (let i = 0; i < data.count; i++) {
+      api_data_results.push(data.results[i]);
+    }
+    console.log("~~~~~~~~~~~~~~~~~~~~~~~~API DATA RESULTS~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+    console.log(api_data_results);
+    console.log("~~~~~~~~~~~~~~~~~~~~~~~~~~~DATA~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+    console.log(data)
+    console.log("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+  }
+
   const applyLockedOverlay = gradesFeatureIsFullyLocked ? 'locked-overlay' : '';
 
   // DAGG ADDITIONS 1 START //
@@ -39,7 +63,7 @@ const ProgressTab = () => {
     enablecert = false;
   }
   console.log('ENABLE CERT 1: ' + enablecert);
-
+  
   let NoCertData = true;
   let showprogress = true;
 
@@ -93,7 +117,22 @@ const ProgressTab = () => {
     return null;
   }
 
+
+  if (certificateData) {
+    console.log('~~~~~~~~~~~~~~~~~CERTIFICATE DATA~~~~~~~~~~~~~~~~~~~~~~~')
+    console.log(certificateData)
+    console.log('~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~')
+    console.log('CERTIFICATE DATA CERT WEB VIEW URL:' + certificateData.certWebViewUrl)
+    console.log('CERTIFICATE CERT STATUS:' + certificateData.certStatus)
+  }
+
+    console.log('~~~~~~~~~~~~~~~~~User and User ID~~~~~~~~~~~~~~~~~~~~~~~')
+    console.log(user)
+    console.log(user.userId)
+    console.log('~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~')
+
   const wideScreen = windowWidth >= breakpoints.large.minWidth;
+
   return (
     <>
       <ProgressHeader />
@@ -158,13 +197,14 @@ const ProgressTab = () => {
                   ταυτόχρονα με την ανάρτηση της βεβαίωσής σας.
                 </h3>
                 <form
-                  action="https://pay.mathesis.org/el/payments/pay/"
+                  action="http://139.91.205.38:5005/el/cart/"
                   method="POST"
                 >
                   <input type="hidden" name="uname" value={user.username} />
                   <input type="hidden" name="email" value={user.email} />
                   <input type="hidden" name="uid" value={user.userId} />
                   <input type="hidden" name="cid" value={courseId} />
+                  <input type="hidden" name="token" value={ data.token } />
                   <input
                     type="submit"
                     value="Έκδοση Βεβαίωσης"
