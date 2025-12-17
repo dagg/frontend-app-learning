@@ -1,6 +1,11 @@
 import React from 'react';
+// import { useSelector } from 'react-redux';
+
 import { useWindowSize } from '@openedx/paragon';
+
+import { getAuthenticatedUser } from '@edx/frontend-platform/auth';
 import { useContextId } from '../../data/hooks';
+
 import ProgressTabCertificateStatusSidePanelSlot from '../../plugin-slots/ProgressTabCertificateStatusSidePanelSlot';
 
 import CourseCompletion from './course-completion/CourseCompletion';
@@ -16,6 +21,32 @@ const ProgressTab = () => {
   const courseId = useContextId();
   const { disableProgressGraph } = useModel('progress', courseId);
 
+  const user = getAuthenticatedUser();
+
+  // const state = useSelector(state => state);
+  // console.log('Full Redux State:', state);
+
+  const {
+    courseModes,
+    org,
+    verifiedMode,
+    username,
+    number,
+    title,
+  } = useModel('courseHomeMeta', courseId);
+
+  console.log('~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~A');
+  console.log(courseModes);
+  console.log(courseModes[0].name);
+  console.log(courseModes[0].slug);
+  console.log(org);
+  console.log(verifiedMode);
+  console.log(username);
+  console.log(courseModes[0]);
+  console.log(title +" - "+ number);
+  // console.log(verificationData);
+  console.log('~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~B');
+
   const windowWidth = useWindowSize().width;
   if (windowWidth === undefined) {
     // Bail because we don't want to load <CertificateStatus/> twice, emitting 'visited' events both times.
@@ -27,6 +58,7 @@ const ProgressTab = () => {
   return (
     <>
       <ProgressHeader />
+      <h3 >~~~ [Mode: {courseModes[0].slug} | Org: {org} | Course Modes Name: {courseModes[0].name} | Title: {title} | Number: {number}] ~~~~~</h3>
       <div className="row w-100 m-0">
         {/* Main body */}
         <div className="col-12 col-md-8 p-0">
