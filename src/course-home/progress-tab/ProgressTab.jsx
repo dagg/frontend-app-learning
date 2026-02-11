@@ -158,8 +158,8 @@ const ProgressTab = () => {
                   ταυτόχρονα με την ανάρτηση της βεβαίωσής σας.
                 </h3>
                 <form
-                  // action="https://pay.mathesis.org/el/payments/pay/"
-                  action="http://139.91.205.38:5005/el/cart/"
+                  action="https://pay.mathesis.org/el/payments/pay/"
+                  // action="http://139.91.205.38:5005/el/cart/"
                   method="POST"
                 >
                   <input type="hidden" name="uname" value={user.username} />
