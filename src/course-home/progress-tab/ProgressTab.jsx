@@ -36,6 +36,22 @@ const ProgressTab = () => {
     title,
   } = useModel('courseHomeMeta', courseId);
 
+console.log('~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~A');
+ console.log(courseModes);
+ console.log(courseModes[0].name);
+ console.log(courseModes[0].slug);
+ console.log(org);
+ console.log(verifiedMode);
+ console.log(username);
+ console.log(courseModes[0]);
+ console.log(title +" - "+ number);
+ // console.log(verificationData);
+ console.log('~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~B');
+
+ console.log(certificateData);
+
+ console.log('~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~C');
+
   // DAGG ADDITIONS 1 START //
   let enablecert = true;
   if (
@@ -67,6 +83,10 @@ const ProgressTab = () => {
       enablecert = false;
       showprogress = true;
     }
+  }
+
+  if (courseModes[0].slug === 'verified') {
+    showprogress = true;
   }
 
   const divPayStyles = {
