@@ -56,6 +56,7 @@ const OutlineTab = () => {
       courseDateBlocks,
     },
     enableProctoredExams,
+    certData,
   } = useModel('outline', courseId);
 
   const [expandAll, setExpandAll] = useState(false);
@@ -66,10 +67,17 @@ const OutlineTab = () => {
     courserun_key: courseId,
   };
 
+  const shouldShowCertAlert = certData?.certWebViewUrl != null && certData?.certStatus === 'downloadable';
+
   // Below the course title alerts (appearing in the order listed here)
   const courseStartAlert = useCourseStartAlert(courseId);
   const courseEndAlert = useCourseEndAlert(courseId);
-  const certificateAvailableAlert = useCertificateAvailableAlert(courseId);
+
+  let certificateAvailableAlert;
+  if (shouldShowCertAlert) {
+    certificateAvailableAlert = useCertificateAvailableAlert(courseId);
+  }
+
   const privateCourseAlert = usePrivateCourseAlert(courseId);
   const scheduledContentAlert = useScheduledContentAlert(courseId);
 
@@ -134,16 +142,30 @@ const OutlineTab = () => {
           />
         </div>
         <div className="col col-12 col-md-8">
-          <AlertList
-            topic="outline-course-alerts"
-            className="mb-3"
-            customAlerts={{
-              ...certificateAvailableAlert,
-              ...courseEndAlert,
-              ...courseStartAlert,
-              ...scheduledContentAlert,
-            }}
-          />
+          {certificateAvailableAlert ? (
+            <AlertList
+              topic="outline-course-alerts"
+              className="mb-3"
+              customAlerts={{
+                ...certificateAvailableAlert,
+                ...courseEndAlert,
+                ...courseStartAlert,
+                ...scheduledContentAlert,
+              }}
+            />
+          ) : (
+            <AlertList
+              topic="outline-course-alerts"
+              className="mb-3"
+              customAlerts={{
+                // ...certificateAvailableAlert,
+                ...courseEndAlert,
+                ...courseStartAlert,
+                ...scheduledContentAlert,
+              }}
+            />
+          )}
+
           {isSelfPaced && hasDeadlines && (
             <>
               <ShiftDatesAlert model="outline" fetch={fetchOutlineTab} />

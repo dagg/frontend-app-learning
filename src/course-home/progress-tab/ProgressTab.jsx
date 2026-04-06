@@ -1,6 +1,11 @@
 import React from 'react';
+// import { useSelector } from 'react-redux';
+
 import { useWindowSize } from '@openedx/paragon';
+
+import { getAuthenticatedUser } from '@edx/frontend-platform/auth';
 import { useContextId } from '../../data/hooks';
+
 import ProgressTabCertificateStatusSidePanelSlot from '../../plugin-slots/ProgressTabCertificateStatusSidePanelSlot';
 
 import CourseCompletion from './course-completion/CourseCompletion';
@@ -16,6 +21,97 @@ const ProgressTab = () => {
   const courseId = useContextId();
   const { disableProgressGraph } = useModel('progress', courseId);
 
+  const user = getAuthenticatedUser();
+  const { certificateData } = useModel('progress', courseId);
+
+  // const state = useSelector(state => state);
+  // console.log('Full Redux State:', state);
+
+  const {
+    courseModes,
+    org,
+    verifiedMode,
+    username,
+    number,
+    title,
+  } = useModel('courseHomeMeta', courseId);
+
+console.log('~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~A');
+ console.log(courseModes);
+ console.log(courseModes[0].name);
+ console.log(courseModes[0].slug);
+ console.log(org);
+ console.log(verifiedMode);
+ console.log(username);
+ console.log(courseModes[0]);
+ console.log(title +" - "+ number);
+ // console.log(verificationData);
+ console.log('~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~B');
+
+ console.log(certificateData);
+
+ console.log('~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~C');
+
+  // DAGG ADDITIONS 1 START //
+  let enablecert = true;
+  if (
+    String(courseId).includes('Physics')
+    && !String(courseId).includes('Eur')
+    && (String(user.email).includes('physics.uoc.gr')
+      || String(user.email).includes('materials.uoc.gr')
+      || String(user.email).includes('tem.uoc.gr'))
+  ) {
+    enablecert = false;
+  }
+
+  let NoCertData = true;
+  let showprogress = true;
+
+  if (certificateData) {
+    if (certificateData.certWebViewUrl) {
+      NoCertData = false;
+      showprogress = true;
+    } else {
+      NoCertData = true;
+      showprogress = false;
+    }
+
+    if (
+      certificateData.certStatus === 'audit_passing'
+      || certificateData.certStatus === 'honor_passing'
+    ) {
+      enablecert = false;
+      showprogress = true;
+    }
+  }
+
+  if (courseModes[0].slug === 'verified') {
+    showprogress = true;
+  }
+
+  const divPayStyles = {
+    boxShadow: '0 0.0625rem 0.125rem rgba(0, 0, 0, 0.2)',
+    margin: '4em',
+    padding: '1em',
+    borderRadius: '0.375rem',
+  };
+
+  const divPayButtonStyles = {
+    display: 'block',
+    border: '1px solid #d2c9c9',
+    borderRadius: '3px',
+    boxShadow: 'inset 0 1px 0 0 #fff',
+    color: '#333',
+    fontWeight: 'bold',
+    marginTop: '2em',
+    padding: '.6em',
+    backgroundColor: '#f1f1f1',
+    cursor: 'pointer',
+    textAlign: 'center',
+  };
+
+  // DAGG ADDITIONS 1 END //
+
   const windowWidth = useWindowSize().width;
   if (windowWidth === undefined) {
     // Bail because we don't want to load <CertificateStatus/> twice, emitting 'visited' events both times.
@@ -30,17 +126,90 @@ const ProgressTab = () => {
       <div className="row w-100 m-0">
         {/* Main body */}
         <div className="col-12 col-md-8 p-0">
-          {!disableProgressGraph && <CourseCompletion />}
-          <ProgressTabCertificateStatusMainBodySlot />
-          <ProgressTabCourseGradeSlot />
-          <ProgressTabGradeBreakdownSlot />
+
+          {/* DAGG CHANGES */}
+
+          {showprogress ? (
+            <div>
+              {!disableProgressGraph && <CourseCompletion />}
+              <ProgressTabCertificateStatusMainBodySlot />
+              <ProgressTabCourseGradeSlot />
+              <ProgressTabGradeBreakdownSlot />
+            </div>
+          ) : (
+            <div>
+              <div className="msg-content" style={divPayStyles}>
+                <h4 className="hd hd-4 title">
+                  <b>
+                    Συγχαρητήρια, πληροίτε τις προϋποθέσεις για τη λήψη
+                    βεβαίωσης επιτυχούς παρακολούθησης!
+                  </b>
+                </h4>
+                <p className="copy">
+                  Το σύστημα πληρωμών για την έκδοση βεβαιώσεων έχει
+                  ενεργοποιηθεί.
+                  <br />
+                  Oι τρόποι πληρωμής που προβλέπονται είναι μέσω:
+                </p>
+                <ol
+                  className="copy"
+                  style={{ textAlign: 'left', marginTop: '0px' }}
+                >
+                  <li> χρεωστικής/πιστωτικής κάρτας</li>
+                  <li> Paypal</li>
+                  <li> τραπεζικής κατάθεσης</li>
+                  <li> αντικαταβολής (με επιπλέον κόστος 3 ευρώ) και</li>
+                  <li> πληρωμής σε κατάστημα.</li>
+                </ol>
+                <p className="copy">
+                  Η βεβαίωσή σας θα εκδοθεί εντός 2-5 εργάσιμων ημερών στην
+                  περίπτωση που η πληρωμή σας γίνει μέσω Paypal, με χρήση
+                  χρεωστικής/πιστωτικής κάρτας, με πληρωμή σε κατάστημα και με
+                  κατάθεση σε τράπεζα. Εάν πληρώσετε με αντικαταβολή μπορεί να
+                  χρειαστούν μέχρι και 60 ημερολογιακές ημέρες από τη καταχώρηση
+                  του αιτήματός σας έως και την ανάρτηση της ηλεκτρονικής σας
+                  βεβαίωσης. Μόλις η βεβαίωσή σας εκδοθεί, θα ειδοποιηθείτε μέσω
+                  email για την ανάρτησή της.
+                </p>
+                <br />
+                <h3 lasscName="hd hd-4 title">
+                  Για να ενεργοποιηθεί η σελίδα της προόδου σας θα πρέπει να
+                  προχωρήσετε σε έκδοση βεβαίωσης. Η σελίδα θα ενεργοποιηθεί
+                  ταυτόχρονα με την ανάρτηση της βεβαίωσής σας.
+                </h3>
+                <form
+                  action="https://pay.mathesis.org/el/payments/pay/"
+                  // action="http://139.91.205.38:5005/el/cart/"
+                  method="POST"
+                >
+                  <input type="hidden" name="uname" value={user.username} />
+                  <input type="hidden" name="email" value={user.email} />
+                  <input type="hidden" name="uid" value={user.userId} />
+                  <input type="hidden" name="cid" value={courseId} />
+                  <input
+                    type="submit"
+                    value="Έκδοση Βεβαίωσης"
+                    style={divPayButtonStyles}
+                  />
+                </form>
+              </div>
+            </div>
+          )}
+
         </div>
 
         {/* Side panel */}
-        <div className="col-12 col-md-4 p-0 px-md-4">
-          <ProgressTabCertificateStatusSidePanelSlot />
-          <ProgressTabRelatedLinksSlot />
-        </div>
+
+        {showprogress ? (
+          <div className="col-12 col-md-4 p-0 px-md-4">
+            <ProgressTabCertificateStatusSidePanelSlot />
+            <ProgressTabRelatedLinksSlot />
+          </div>
+        ) : (
+          <div className="col-12 col-md-4 p-0 px-md-4">
+            <ProgressTabRelatedLinksSlot />
+          </div>
+        )}
       </div>
     </>
   );
