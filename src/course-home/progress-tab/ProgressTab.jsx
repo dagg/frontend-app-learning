@@ -36,21 +36,6 @@ const ProgressTab = () => {
     title,
   } = useModel('courseHomeMeta', courseId);
 
-console.log('~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~A');
- console.log(courseModes);
- console.log(courseModes[0].name);
- console.log(courseModes[0].slug);
- console.log(org);
- console.log(verifiedMode);
- console.log(username);
- console.log(courseModes[0]);
- console.log(title +" - "+ number);
- // console.log(verificationData);
- console.log('~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~B');
-
- console.log(certificateData);
-
- console.log('~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~C');
 
   // DAGG ADDITIONS 1 START //
   let enablecert = true;
@@ -179,7 +164,6 @@ console.log('~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~A');
                 </h3>
                 <form
                   action="https://pay.mathesis.org/el/payments/pay/"
-                  // action="http://139.91.205.38:5005/el/cart/"
                   method="POST"
                 >
                   <input type="hidden" name="uname" value={user.username} />
